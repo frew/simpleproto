@@ -1,0 +1,65 @@
+// This is the protocol buffer (basically a struct with easy serialization
+// from Google) that's used for Graphics RPC.
+
+message GraphicsTransaction {
+  // A transaction is a series of messages.
+  repeated GraphicsMessage message = 1;
+
+  // If persistent is set, then the transaction is stored
+  // and rendered before each subsequent non-persistent transaction.
+  // This is essentially just a server-side caching mechanism to
+  // reduce network traffic.
+  optional bool persistent = 2 [default = false];
+}
+
+// A GraphicsMessage should have exactly one of its submessages set.
+message GraphicsMessage {
+  optional ColorMessage color = 1; 
+  optional PointSizeMessage point_size = 2;
+  optional CircleMessage circle = 3;
+  optional PointMessage point = 4;
+  optional LineMessage line = 5;
+  optional MapMessage map = 6;
+  optional ScaleMessage scale = 7;
+}
+
+message ColorMessage {
+  required int32 r = 1;
+  required int32 g = 2;
+  required int32 b = 3;
+}
+
+message PointSizeMessage {
+  required double sz = 1;
+}
+
+message CircleMessage {
+  required double cx = 1;
+  required double cy = 2;
+  required double radius = 3;
+}
+
+message PointMessage {
+  required double x = 1;
+  required double y = 2;
+}
+
+message LineMessage {
+  required double x0 = 1;
+  required double y0 = 2;
+  required double x1 = 3;
+  required double y1 = 4;
+}
+
+message MapMessage {
+  required double xcenter = 1;
+  required double ycenter = 2;
+  required double scale = 3;
+  required int32 xres = 4;
+  required int32 yres = 5;
+  optional bytes data = 6;
+}
+
+message ScaleMessage {
+  required double scale = 1;
+}
