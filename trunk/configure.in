@@ -1,0 +1,46 @@
+AC_INIT(rpc.cpp)
+AM_INIT_AUTOMAKE(simplerpc,0.1)
+AC_PROG_CXX
+AC_PROG_RANLIB
+AX_CHECK_GL
+AX_CHECK_GLU
+AX_CHECK_GLUT
+LIBS="${GLU_LIBS} ${GLUT_LIBS} $LIBS"
+CXXFLAGS="${GLU_CFLAGS} ${GLUT_CFLAGS} $CFLAGS"
+
+BOOST_INC=""
+AC_MSG_CHECKING([whether we have good Boost-1_36])
+if test -f "/usr/local/include/boost-1_36/boost/math/distributions.hpp"; then
+  BOOST_INC="-I/usr/local/include/boost-1_36"
+  AC_MSG_RESULT([yes])
+else
+  if test -f "/usr/local/include/boost/math/distributions.hpp" -o \
+          -f "/usr/include/boost/math/distributions.hpp"; then
+    AC_MSG_RESULT([weirdly])
+  else
+    AC_MSG_RESULT([no])
+    AC_MSG_WARN([Good Boost (with distributions) not found])
+  fi
+fi
+AC_SUBST(BOOST_INC)
+
+DIST_INC=""
+DIST_LIB=""
+BOOST_LIB="-lboost_thread"
+AC_MSG_CHECKING([whether we're on an erratic])
+if test -d "/home/supermunchers/dist/include"; then
+  AC_MSG_RESULT([yes])
+  DIST_INC="-I/home/supermunchers/dist/include"
+  DIST_LIB="-L/home/supermunchers/dist/lib"
+  BOOST_LIB="-lboost_thread-gcc41-mt"
+else
+  AC_MSG_RESULT([no])
+fi
+AC_SUBST(DIST_INC)
+AC_SUBST(DIST_LIB)
+AC_SUBST(BOOST_LIB)
+
+# Note: we don't actually depend on this...this is working as intended
+# since we don't care about autoconf's variables
+AC_CONFIG_HEADERS(config.h)
+AC_OUTPUT(Makefile)
