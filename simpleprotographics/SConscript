@@ -1,7 +1,11 @@
 Import('env')
 env.AppendUnique(LIBS=['libsimpleprotorpc',])
-graphicslib = env.SharedLibrary('simpleprotographics', ['graphics.cpp', 'graphics.pb.cc'])
-Install(env['LIBDIR'], graphicslib)
+graphics_source = ['graphics.cpp', 'graphics.pb.cc']
+# graphics_sharedlib = env.SharedLibrary('simpleprotographics', graphics_source)
+graphics_staticlib = env.StaticLibrary('simpleprotographics', graphics_source)
+# Install(env['LIBDIR'], graphics_sharedlib)
+Install(env['LIBDIR'], graphics_staticlib)
 Install(env['INCDIR'], 'graphics.h')
 Install(env['INCDIR'], 'graphics.pb.h')
 graphics_server = env.Program('graphics_server', ['graphics_server.cpp'], LIBS=['GL', 'glut', 'simpleprotorpc', 'simpleprotographics'] + env['LIBS'])
+Install(env['BINDIR'], graphics_server)
