@@ -1,4 +1,6 @@
 Import('env')
+env2 = env
+env = env2.Clone()
 env.AppendUnique(LIBS=['libsimpleprotorpc', 'libsimpleprotographics'])
 env.Program('test_graphics_client', ['test_graphics_client.cpp'])
 env.Program('test_rpc_client', ['test_rpc_client.cpp'])
