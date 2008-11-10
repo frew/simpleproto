@@ -2,7 +2,7 @@ AC_INIT([rpc.cpp])
 AM_INIT_AUTOMAKE([simpleproto],[0.1])
 
 AC_PROG_CXX
-AC_PROG_RANLIB
+AC_PROGR_LIBTOOL
 AC_PROG_INSTALL
 
 # Check for OpenGL libraries
@@ -46,4 +46,4 @@ AC_SUBST(CXXFLAGS)
 # Note: we don't actually depend on this...this is working as intended
 # since we don't care about autoconf's variables
 AC_CONFIG_HEADERS([config.h])
-AC_OUTPUT([Makefile])
+AC_OUTPUT([Makefile simpleprotorpc/Makefile simpleprotorpc.pc simpleprotographics/Makefile simpleprotographics.pc test/Makefile])

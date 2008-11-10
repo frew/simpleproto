@@ -1,4 +1,4 @@
-#include "rpc.h"
+#include <simpleprotorpc/rpc.h>
 
 int main(int argc, char** argv) {
   RPC* rpc = RPC::CreateServer("1234");
