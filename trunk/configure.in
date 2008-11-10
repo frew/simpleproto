@@ -39,8 +39,7 @@ AC_COMPILE_IFELSE(
     AC_MSG_RESULT(no)
   ])
 
-AC_MSG_CHECKING([for the Google protocol buffer library])
-AX_CXX_CHECK_LIB(protobuf, [google::protobuf::SetLogHandler])
+AX_CXX_CHECK_LIB(protobuf, [google::protobuf::DoNothing ()])
 
 AC_SUBST(CXXFLAGS)
 
