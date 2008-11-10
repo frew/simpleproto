@@ -33,6 +33,7 @@ dir_list = ['simpleprotorpc',
             'simpleprotographics',
             'test']
 
+
 for dir in dir_list: 
   sconscript_file = dir + '/SConscript'
   export_include = include + '/' + dir
@@ -43,7 +44,7 @@ for dir in dir_list:
                     CPPPATH = [include, GetOption('boost_inc_dir')],
                     LIBPATH = [lib, GetOption('boost_lib_dir')],
                     LIBS=['boost_thread','protobuf'])
-  env.Alias('install', GetOption('prefix'))
+  env.Default(GetOption('prefix'))
 
   if ARGUMENTS.get('PROD', 0):
     env.AppendUnique(CXXFLAGS=['-O2',])

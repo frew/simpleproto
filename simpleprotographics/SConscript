@@ -1,4 +1,6 @@
 Import('env')
+env2 = env
+env = env2.Clone()
 env.AppendUnique(LIBS=['libsimpleprotorpc',])
 graphics_source = ['graphics.cpp', 'graphics.pb.cc']
 # graphics_sharedlib = env.SharedLibrary('simpleprotographics', graphics_source)
