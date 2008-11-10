@@ -1,0 +1,4 @@
+Import('env')
+simpleprotolib = env.SharedLibrary('simpleprotorpc', ['rpc.cpp'])
+env.Install(env['INCDIR'], 'rpc.h')
+env.Install(env['LIBDIR'], simpleprotolib)

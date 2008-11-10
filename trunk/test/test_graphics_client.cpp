@@ -1,5 +1,5 @@
-#include "graphics.pb.h"
-#include "rpc.h"
+#include <simpleprotographics/graphics.pb.h>
+#include <simpleprotorpc/rpc.h>
 
 int main(int argc, char** argv) {
   RPC* rpc = RPC::CreateClient("localhost", "1234");
