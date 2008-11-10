@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: simpleprotographics
+Description: A simple graphics library based on Google's protobuf library.
+Version: @VERSION@
+Libs: -L${libdir} -l@SIMPLEPROTORPC_LIBRARY_NAME@-@SIMPLEPROTORPC_API_VERSION@
+Cflags: -I${includedir}/@SIMPLEPROTORPC_LIBRARY_NAME@-@SIMPLEPROTORPC_API_VERSION@ -I${libdir}/@SIMPLEPROTORPC_LIBRARY_NAME@-@SIMPLEPROTORPC_API_VERSION@/include
