@@ -44,6 +44,8 @@ for dir in dir_list:
                     CPPPATH = [include, GetOption('boost_inc_dir')],
                     LIBPATH = [lib, GetOption('boost_lib_dir')],
                     LIBS=['boost_thread','protobuf'])
+  env.Alias('server', bin + '/graphics_server')
+  env.Alias('libs', [lib, include])
   env.Default(GetOption('prefix'))
 
   if ARGUMENTS.get('PROD', 0):

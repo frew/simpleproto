@@ -1,0 +1,14 @@
+To build the graphics server:
+  python scons.py server
+
+To build the library:
+  python scons.py libs
+
+To build everything:
+  python scons.py
+
+By default the files are installed to ./export (so you can run 
+ ./export/bin/graphics_server for the server or link against 
+ ./export/lib/libsimpleprotographics.a for the client). You can change
+this by adding a --prefix command line argument: 
+  python scons.py server --prefix=/usr/local
