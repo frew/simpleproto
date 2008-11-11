@@ -2,7 +2,6 @@
 #define _RPC_H_
 
 #include <iostream>
-#include <sstream>
 #include <deque>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -12,28 +11,9 @@
 
 #include <boost/thread/mutex.hpp>
 
-// A macro to disallow the copy constructor and operator= functions
-// This should be used in the private: declarations for a class
-#define DISALLOW_COPY_AND_ASSIGN(TypeName) \
-  TypeName(const TypeName&);               \
-  void operator=(const TypeName&)
+#include "util.h"
 
 using namespace std;
-
-// A StreamableException allows the programmer to specify
-// the exception's description via a stream interface.
-class StreamableException : public exception {
- public:
-  StreamableException();
-  explicit StreamableException(string description);
-  virtual ~StreamableException() throw ();
-  virtual ostringstream& stream();
-  virtual string description();
- protected:
-  ostringstream descstr;
- private:
-  DISALLOW_COPY_AND_ASSIGN(StreamableException);
-};
 
 class RPCException : public StreamableException {
  public:
@@ -43,13 +23,15 @@ class RPCException : public StreamableException {
   DISALLOW_COPY_AND_ASSIGN(RPCException);
 };
 
-// RPC wraps a connection to another host, used to pass
-// strings encapsulating Google protocol buffers
-// (http://code.google.com/p/protobuf/) from one endpoint
-// to the other. Communication goes both ways, and the RPC
-// name is perhaps a misnomer, although the main flow of information
-// in the Graphics client is similar to the method calls in the
-// provided graphics library.
+/** 
+ * RPC wraps a connection to another host, used to pass
+ * strings encapsulating Google protocol buffers
+ * (http://code.google.com/p/protobuf/) from one endpoint
+ * to the other. Communication goes both ways, and the RPC
+ * name is perhaps a misnomer, although the main flow of information
+ * in the Graphics client is similar to the method calls in the
+ * provided graphics library.
+ */
 class RPC {
  public:
   // Connect to the specified host/port.

@@ -206,21 +206,3 @@ string* RPC::PollMessage(bool blocking) {
   delete[] buf;
   return ret_string;
 }
-
-StreamableException::StreamableException() {
-}
-
-StreamableException::StreamableException(string description)
-    : descstr(description) {
-}
-
-StreamableException::~StreamableException() throw () {
-}
-
-ostringstream& StreamableException::stream() {
-  return descstr;
-}
-
-string StreamableException::description() {
-  return descstr.str();
-}
