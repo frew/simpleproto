@@ -24,7 +24,7 @@ class GraphicsClient {
   GraphicsTransaction* current_transaction();
  private:
   bool enabled;
-  RPC* conn;
+  simpleprotorpc::RPC* conn;
   GraphicsTransaction cur_trans;
 };
 

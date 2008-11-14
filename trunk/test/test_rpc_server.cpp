@@ -1,5 +1,7 @@
 #include <simpleprotorpc/rpc.h>
 
+using namespace simpleprotorpc;
+
 int main(int argc, char** argv) {
   RPC* rpc = RPC::CreateServer("1234");
   while (true) {

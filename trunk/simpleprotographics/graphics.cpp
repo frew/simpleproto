@@ -1,5 +1,7 @@
 #include "graphics.h"
 
+using namespace simpleprotorpc;
+
 GraphicsClient::GraphicsClient(string host, string port)
   : enabled(host != "disabled")
 {

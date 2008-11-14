@@ -1,6 +1,8 @@
 #include <simpleprotographics/graphics.pb.h>
 #include <simpleprotorpc/rpc.h>
 
+using namespace simpleprotorpc;
+
 int main(int argc, char** argv) {
   RPC* rpc = RPC::CreateClient("localhost", "1234");
   GraphicsTransaction t;
