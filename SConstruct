@@ -46,6 +46,7 @@ for dir in dir_list:
                     LIBS=['boost_thread','protobuf'])
   env.Alias('server', bin + '/graphics_server')
   env.Alias('libs', [lib, include])
+  env.Alias('tests', 'build/test')
   env.Default(GetOption('prefix'))
 
   if ARGUMENTS.get('PROD', 0):

@@ -7,12 +7,13 @@
 #include <boost/bind.hpp>
 #include <boost/thread/thread.hpp>
 
-// This stuff is all based on Beej's sockets tutorial
+namespace simpleprotorpc {
 namespace {
+  // Throws an exception if result is non-zero.
   void CheckAddrInfo(int result) {
     if (result != 0) {
-      RPCException* ex = new RPCException();
-      ex->stream() << "AddrInfo failure: "
+      RPCException ex;
+      ex.stream() << "AddrInfo failure: "
                   << gai_strerror(result);
       throw ex;
     }
@@ -22,10 +23,21 @@ namespace {
   // is non-zero.
   void CheckErrno(int result, const char* error_msg) {
     if (result == -1) {
-      RPCException* ex = new RPCException();
-      ex->stream() << error_msg << " (result: " << result 
+      RPCException ex;
+      ex.stream() << error_msg << " (result: " << result 
                   << "errno: " << errno << ")";
       throw ex;
+    }
+  }
+
+  void CleanupSocket(int sock_to_delete, deque<int>* sock_list) {
+    for (deque<int>::iterator it = sock_list->begin();
+        it != sock_list->end();
+        ++it) {
+      if (*it == sock_to_delete) {
+        sock_list->erase(it);
+        break;
+      }
     }
   }
 }
@@ -40,7 +52,7 @@ RPC* RPC::CreateServer(string port) {
   return rpc;
 }
 
-RPC::RPC(string port) : port(port), cbfn(NULL), async(false), server(true) {
+RPC::RPC(string port) : port(port), async(false), server(true) {
   addrinfo hints, *res;
   memset(&hints, 0, sizeof hints);
   hints.ai_family = AF_UNSPEC; // IPvWhatever
@@ -56,7 +68,7 @@ RPC::RPC(string port) : port(port), cbfn(NULL), async(false), server(true) {
   CheckErrno(listen(server_sock, 10), "Error listening on server sock.");
 }
 
-RPC::RPC(string host, string port) : host(host), port(port), cbfn(NULL), async(false), server(false) {
+RPC::RPC(string host, string port) : host(host), port(port), async(false), server(false) {
   addrinfo hints, *res;
   memset(&hints, 0, sizeof hints);
   hints.ai_family = AF_UNSPEC;
@@ -71,6 +83,11 @@ RPC::RPC(string host, string port) : host(host), port(port), cbfn(NULL), async(f
   sock_list.push_back(sockfd);
 }
 
+void RPC::SetSendPolicy(RPC::AsyncSendPolicy new_send_policy) {
+  boost::mutex::scoped_lock l(send_policy_mutex);
+  send_policy = new_send_policy;
+}
+
 void RPC::AsyncSend() {
   bool found = true;
   while (true) {
@@ -83,29 +100,40 @@ void RPC::AsyncSend() {
         found = false;
         continue;
       }
-      if (messages.size() > 2) {
-        cout << "Queue backup: " << messages.size() << endl;
-        while (messages.size() > 1) {
-          messages.pop_front(); 
+      {
+        boost::mutex::scoped_lock ll(send_policy_mutex);
+        switch (send_policy) {
+          case SEND_LAST:
+            if (messages.size() > 2) {
+              cerr << "Queue backup: " << messages.size() << endl;
+              while (messages.size() > 1) {
+                // Check for ensured delivery
+                if (messages.front().second) break;
+                messages.pop_front(); 
+              }
+            }
+            break;
+          case SEND_ALL:
+            break;
         }
       }
-      cur_string = messages.front();
+      cur_string = messages.front().first;
       messages.pop_front();
     }
-
     SendMessage(*cur_string, false);
     delete cur_string;
   }
 }
 
-void RPC::SendMessage(string& msg, bool send_async) {
+void RPC::SendMessage(string& msg, bool send_async, bool ensure_sent) {
   if (send_async) {
     if (!async) {
+      // Start the async thread.
       boost::thread(boost::bind(&RPC::AsyncSend, this));
       async = true;
     }
     boost::mutex::scoped_lock l(messages_mutex);
-    messages.push_back(new string(msg));    
+    messages.push_back(pair<string*, bool>(new string(msg), ensure_sent)); 
   } else {
     boost::mutex::scoped_lock l(sending_mutex);
     for (deque<int>::iterator it = sock_list.begin();
@@ -117,9 +145,11 @@ void RPC::SendMessage(string& msg, bool send_async) {
       int num_sent = send(sock, &msglen, 4, 0);
       CheckErrno(num_sent, "Error sending length.");
       if (num_sent != 4) {
-        cerr << "num_sent " << num_sent << " != 4! :(" << endl;
+        RPCException ex;
+        ex.stream() << "Send length failed: num_sent " << num_sent << " != 4!";
+        throw ex;
       }
-      int sent_so_far = 0;
+      unsigned int sent_so_far = 0;
       while (sent_so_far != msg.size()) {
         num_sent = send(sock, msg.c_str() + sent_so_far,
                         msg.size() - sent_so_far, 0);
@@ -130,18 +160,6 @@ void RPC::SendMessage(string& msg, bool send_async) {
   }
 }
 
-namespace {
-void CleanupSocket(int sock_to_delete, deque<int>* sock_list) {
-  for (deque<int>::iterator it = sock_list->begin();
-       it != sock_list->end();
-       ++it) {
-    if (*it == sock_to_delete) {
-      sock_list->erase(it);
-      break;
-    }
-  }
-}
-}
 string* RPC::PollMessage(bool blocking) {
   struct timeval tv;
   tv.tv_sec = 0;
@@ -205,4 +223,5 @@ string* RPC::PollMessage(bool blocking) {
   string* ret_string = new string(buf, msglen);
   delete[] buf;
   return ret_string;
+}
 }

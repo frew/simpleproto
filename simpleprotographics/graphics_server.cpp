@@ -25,6 +25,7 @@ namespace {
 
 using namespace boost;
 using namespace std;
+using namespace simpleprotorpc;
 
 Map* Map::map = NULL;
 Graphics *Graphics::g = NULL;
@@ -280,8 +281,8 @@ void NetworkThreadRun(string port) {
         delete msg;
       }
     }
-  } catch (RPCException* ex) {
-    cout << "RPCException: " << ex->description() << endl;
+  } catch (RPCException& ex) {
+    cerr << "RPCException caught: " << ex.description() << endl;
   }
 }
 
