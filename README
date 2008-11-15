@@ -4,6 +4,9 @@ To build the graphics server:
 To build the library:
   python scons.py libs
 
+To build tests (executable from build/test/<executable>):
+  python scons.py tests
+
 To build everything:
   python scons.py
 
