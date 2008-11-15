@@ -52,7 +52,7 @@ RPC* RPC::CreateServer(string port) {
   return rpc;
 }
 
-RPC::RPC(string port) : port(port), async(false), server(true) {
+RPC::RPC(string port) : port(port), async(false), server(true), send_policy(SEND_ALL) {
   addrinfo hints, *res;
   memset(&hints, 0, sizeof hints);
   hints.ai_family = AF_UNSPEC; // IPvWhatever
@@ -68,7 +68,8 @@ RPC::RPC(string port) : port(port), async(false), server(true) {
   CheckErrno(listen(server_sock, 10), "Error listening on server sock.");
 }
 
-RPC::RPC(string host, string port) : host(host), port(port), async(false), server(false) {
+RPC::RPC(string host, string port) : host(host), port(port), async(false), server(false),
+    send_policy(SEND_ALL) {
   addrinfo hints, *res;
   memset(&hints, 0, sizeof hints);
   hints.ai_family = AF_UNSPEC;

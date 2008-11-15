@@ -1,5 +1,7 @@
 #include "graphics.h"
 
+namespace simpleprotographics {
+
 using namespace simpleprotorpc;
 
 GraphicsClient::GraphicsClient(string host, string port)
@@ -7,6 +9,7 @@ GraphicsClient::GraphicsClient(string host, string port)
 {
   if (!enabled) return;
   conn = RPC::CreateClient(host, port);
+  conn->SetSendPolicy(RPC::SEND_LAST);
 }
 
 GraphicsClient::~GraphicsClient() {
@@ -85,15 +88,17 @@ void GraphicsClient::DrawMap(
   }
 }
 
-void GraphicsClient::DrawFrame()
+void GraphicsClient::DrawFrame(bool persistent)
 {
   if (!enabled) return;
+  if (persistent) cur_trans.set_persistent(persistent);
   string msg;
   cur_trans.SerializeToString(&msg);
-  conn->SendMessage(msg, !cur_trans.persistent());
+  conn->SendMessage(msg, false, !cur_trans.persistent());
   cur_trans.Clear();
 }
 
 GraphicsTransaction* GraphicsClient::current_transaction() {
   return &cur_trans;
+}
 }
