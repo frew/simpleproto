@@ -29,6 +29,10 @@ using namespace simpleprotorpc;
 
 Map* Map::map = NULL;
 GraphicsServer *GraphicsServer::g = NULL;
+// Note: this is theoretically race-y, but due to use case
+// won't actually hurt anything.
+// TODO(frew): Do properly
+RPC* rpc = NULL;
 
 void Draw(const ColorMessage &m) {
   glColor3i(m.r(), m.g(), m.b());
@@ -102,9 +106,11 @@ void GraphicsServer::MainLoop(int &argc, char **argv)
   glutDisplayFunc(display_func);
   glutReshapeFunc(reshape_func);
   glutIdleFunc(idle_func);
+  glutMouseFunc(mouse_func);
 
   glutMainLoop();
 }
+
 void GraphicsServer::DrawTrans(
     GraphicsTransaction* t) {
   for(int i = 0; i < t->message_size(); i++) {
@@ -130,7 +136,7 @@ void GraphicsServer::Display()
   glScaled(1.0/scale, 1.0/scale, 1.0/scale);
   glTranslated(-xCenter, -yCenter, 0.0);
 
-  for (int i = 0; i < persistent.size(); i++) {
+  for (unsigned int i = 0; i < persistent.size(); i++) {
     GraphicsTransaction* pers = persistent[i];
     DrawTrans(pers);
   }
@@ -175,13 +181,55 @@ void GraphicsServer::display_func()
 {
   GraphicsServer::Instance()->Display();
 }
+
 void GraphicsServer::reshape_func(int width, int height)
 {
   GraphicsServer::Instance()->Reshape(width, height);
 }
+
 void GraphicsServer::idle_func()
 {
   GraphicsServer::Instance()->Idle();
+}
+
+void GraphicsServer::mouse_func(int button, int state, int x, int y)
+{
+  MouseEvent e;
+  int modifiers = glutGetModifiers();
+  switch (button) {
+    case GLUT_LEFT_BUTTON:
+      e.set_button(MouseEvent::LEFT_BUTTON);
+      break;
+    case GLUT_MIDDLE_BUTTON:
+      e.set_button(MouseEvent::MIDDLE_BUTTON);
+      break;
+    case GLUT_RIGHT_BUTTON:
+      e.set_button(MouseEvent::RIGHT_BUTTON);
+      break;
+  }
+  switch (state) {
+    case GLUT_UP:
+      e.set_state(MouseEvent::UP);
+      break;
+    case GLUT_DOWN:
+      e.set_state(MouseEvent::DOWN);
+  }
+  e.set_x(x);
+  e.set_y(y);
+
+  if (modifiers & GLUT_ACTIVE_SHIFT) {
+    e.set_shift_down(true); 
+  }
+  if (modifiers & GLUT_ACTIVE_CTRL) {
+    e.set_ctrl_down(true); 
+  }
+  if (modifiers & GLUT_ACTIVE_ALT) {
+    e.set_alt_down(true); 
+  }
+  string msg;
+  e.SerializeToString(&msg);
+  cout << "Sending msg" << endl;
+  rpc->SendMessage(msg, true);
 }
 
 void GraphicsServer::ProcessTransaction(GraphicsTransaction* t)
@@ -271,7 +319,7 @@ void Map::LoadTexture()
 void NetworkThreadRun(string port) {
   GraphicsServer* g = GraphicsServer::Instance();
   try {
-    RPC* rpc = RPC::CreateServer(port);
+    rpc = RPC::CreateServer(port);
     while (true) {
       string* msg = rpc->PollMessage(true);
       if (msg) {
@@ -283,6 +331,7 @@ void NetworkThreadRun(string port) {
     }
   } catch (RPCException& ex) {
     cerr << "RPCException caught: " << ex.description() << endl;
+    exit(1);
   }
 }
 

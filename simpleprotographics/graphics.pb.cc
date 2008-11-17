@@ -35,6 +35,11 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* ScaleMessage_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   ScaleMessage_reflection_ = NULL;
+const ::google::protobuf::Descriptor* MouseEvent_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  MouseEvent_reflection_ = NULL;
+const ::google::protobuf::EnumDescriptor* MouseEvent_MouseButton_descriptor_ = NULL;
+const ::google::protobuf::EnumDescriptor* MouseEvent_MouseState_descriptor_ = NULL;
 
 }  // namespace
 
@@ -157,6 +162,21 @@ void protobuf_BuildDesc_graphics_2eproto_AssignGlobalDescriptors(const ::google:
       ::google::protobuf::DescriptorPool::generated_pool());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     ScaleMessage_descriptor_, ScaleMessage::default_instance_);
+  MouseEvent_descriptor_ = file->message_type(9);
+  MouseEvent::default_instance_ = new MouseEvent();
+  MouseEvent_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      MouseEvent_descriptor_,
+      MouseEvent::default_instance_,
+      MouseEvent::_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MouseEvent, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MouseEvent, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool());
+  MouseEvent_MouseButton_descriptor_ = MouseEvent_descriptor_->enum_type(0);
+  MouseEvent_MouseState_descriptor_ = MouseEvent_descriptor_->enum_type(1);
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    MouseEvent_descriptor_, MouseEvent::default_instance_);
   GraphicsTransaction::default_instance_->InitAsDefaultInstance();
   GraphicsMessage::default_instance_->InitAsDefaultInstance();
   ColorMessage::default_instance_->InitAsDefaultInstance();
@@ -166,6 +186,7 @@ void protobuf_BuildDesc_graphics_2eproto_AssignGlobalDescriptors(const ::google:
   LineMessage::default_instance_->InitAsDefaultInstance();
   MapMessage::default_instance_->InitAsDefaultInstance();
   ScaleMessage::default_instance_->InitAsDefaultInstance();
+  MouseEvent::default_instance_->InitAsDefaultInstance();
 }
 
 void protobuf_BuildDesc_graphics_2eproto() {
@@ -194,7 +215,14 @@ void protobuf_BuildDesc_graphics_2eproto() {
     "\002(\001\022\n\n\002y1\030\004 \002(\001\"g\n\nMapMessage\022\017\n\007xcenter"
     "\030\001 \002(\001\022\017\n\007ycenter\030\002 \002(\001\022\r\n\005scale\030\003 \002(\001\022\014"
     "\n\004xres\030\004 \002(\005\022\014\n\004yres\030\005 \002(\005\022\014\n\004data\030\006 \001(\014"
-    "\"\035\n\014ScaleMessage\022\r\n\005scale\030\001 \002(\001", 711,
+    "\"\035\n\014ScaleMessage\022\r\n\005scale\030\001 \002(\001\"\220\002\n\nMous"
+    "eEvent\022\'\n\006button\030\001 \002(\0162\027.MouseEvent.Mous"
+    "eButton\022%\n\005state\030\002 \002(\0162\026.MouseEvent.Mous"
+    "eState\022\t\n\001x\030\003 \002(\005\022\t\n\001y\030\004 \002(\005\022\022\n\nshift_do"
+    "wn\030\005 \001(\010\022\021\n\tctrl_down\030\006 \001(\010\022\020\n\010alt_down\030"
+    "\007 \001(\010\"C\n\013MouseButton\022\017\n\013LEFT_BUTTON\020\000\022\020\n"
+    "\014RIGHT_BUTTON\020\001\022\021\n\rMIDDLE_BUTTON\020\002\"\036\n\nMo"
+    "useState\022\006\n\002UP\020\000\022\010\n\004DOWN\020\001", 986,
   &protobuf_BuildDesc_graphics_2eproto_AssignGlobalDescriptors);
 }
 
@@ -785,4 +813,124 @@ const ::google::protobuf::Descriptor* ScaleMessage::GetDescriptor() const {
 const ::google::protobuf::Reflection* ScaleMessage::GetReflection() const {
   if (ScaleMessage_reflection_ == NULL) protobuf_BuildDesc_graphics_2eproto();
   return ScaleMessage_reflection_;
+}
+
+// ===================================================================
+
+const ::google::protobuf::EnumDescriptor* MouseEvent_MouseButton_descriptor() {
+  if (MouseEvent_MouseButton_descriptor_ == NULL) protobuf_BuildDesc_graphics_2eproto();
+  return MouseEvent_MouseButton_descriptor_;
+}
+bool MouseEvent_MouseButton_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+    case 2:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#ifndef _MSC_VER
+const MouseEvent_MouseButton MouseEvent::LEFT_BUTTON;
+const MouseEvent_MouseButton MouseEvent::RIGHT_BUTTON;
+const MouseEvent_MouseButton MouseEvent::MIDDLE_BUTTON;
+const MouseEvent_MouseButton MouseEvent::MouseButton_MIN;
+const MouseEvent_MouseButton MouseEvent::MouseButton_MAX;
+#endif  // _MSC_VER
+const ::google::protobuf::EnumDescriptor* MouseEvent_MouseState_descriptor() {
+  if (MouseEvent_MouseState_descriptor_ == NULL) protobuf_BuildDesc_graphics_2eproto();
+  return MouseEvent_MouseState_descriptor_;
+}
+bool MouseEvent_MouseState_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#ifndef _MSC_VER
+const MouseEvent_MouseState MouseEvent::UP;
+const MouseEvent_MouseState MouseEvent::DOWN;
+const MouseEvent_MouseState MouseEvent::MouseState_MIN;
+const MouseEvent_MouseState MouseEvent::MouseState_MAX;
+#endif  // _MSC_VER
+
+
+
+
+
+
+
+const int MouseEvent::_offsets_[7] = {
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MouseEvent, button_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MouseEvent, state_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MouseEvent, x_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MouseEvent, y_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MouseEvent, shift_down_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MouseEvent, ctrl_down_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MouseEvent, alt_down_),
+};
+
+MouseEvent::MouseEvent()
+  : ::google::protobuf::Message(),
+    _cached_size_(0),
+    button_(0),
+    state_(0),
+    x_(0),
+    y_(0),
+    shift_down_(false),
+    ctrl_down_(false),
+    alt_down_(false) {
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+void MouseEvent::InitAsDefaultInstance() {}
+
+MouseEvent::MouseEvent(const MouseEvent& from)
+  : ::google::protobuf::Message(),
+    _cached_size_(0),
+    button_(0),
+    state_(0),
+    x_(0),
+    y_(0),
+    shift_down_(false),
+    ctrl_down_(false),
+    alt_down_(false) {
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  MergeFrom(from);
+}
+
+MouseEvent::~MouseEvent() {
+  if (this != default_instance_) {
+  }
+}
+
+const ::google::protobuf::Descriptor* MouseEvent::descriptor() {
+  if (MouseEvent_descriptor_ == NULL) protobuf_BuildDesc_graphics_2eproto();
+  return MouseEvent_descriptor_;
+}
+
+const MouseEvent& MouseEvent::default_instance() {
+  if (default_instance_ == NULL) protobuf_BuildDesc_graphics_2eproto();
+  return *default_instance_;
+}
+
+MouseEvent* MouseEvent::default_instance_ = NULL;
+
+MouseEvent* MouseEvent::New() const {
+  return new MouseEvent;
+}
+
+const ::google::protobuf::Descriptor* MouseEvent::GetDescriptor() const {
+  return descriptor();
+}
+
+const ::google::protobuf::Reflection* MouseEvent::GetReflection() const {
+  if (MouseEvent_reflection_ == NULL) protobuf_BuildDesc_graphics_2eproto();
+  return MouseEvent_reflection_;
 }

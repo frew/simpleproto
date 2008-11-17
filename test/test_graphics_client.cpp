@@ -4,7 +4,7 @@
 using namespace simpleprotorpc;
 
 int main(int argc, char** argv) {
-  RPC* rpc = RPC::CreateClient("localhost", "1234");
+  RPC* rpc = RPC::CreateClient("frewlinux", "1234");
   GraphicsTransaction t;
   LineMessage* m = t.add_message()->mutable_line();
   m->set_x0(0.0);
