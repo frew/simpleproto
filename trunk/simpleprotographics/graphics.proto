@@ -63,3 +63,25 @@ message MapMessage {
 message ScaleMessage {
   required double scale = 1;
 }
+
+message MouseEvent { 
+  enum MouseButton {
+    LEFT_BUTTON = 0;
+    RIGHT_BUTTON = 1;
+    MIDDLE_BUTTON = 2;
+  }
+  required MouseButton button = 1;
+  
+  enum MouseState {
+    UP = 0;
+    DOWN = 1;
+  }
+  required MouseState state = 2;
+
+  required int32 x = 3;
+  required int32 y = 4;
+
+  optional bool shift_down = 5;
+  optional bool ctrl_down = 6;
+  optional bool alt_down = 7;
+}

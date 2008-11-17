@@ -36,6 +36,26 @@ class PointMessage;
 class LineMessage;
 class MapMessage;
 class ScaleMessage;
+class MouseEvent;
+
+enum MouseEvent_MouseButton {
+  MouseEvent_MouseButton_LEFT_BUTTON = 0,
+  MouseEvent_MouseButton_RIGHT_BUTTON = 1,
+  MouseEvent_MouseButton_MIDDLE_BUTTON = 2
+};
+const ::google::protobuf::EnumDescriptor* MouseEvent_MouseButton_descriptor();
+bool MouseEvent_MouseButton_IsValid(int value);
+const MouseEvent_MouseButton MouseEvent_MouseButton_MouseButton_MIN = MouseEvent_MouseButton_LEFT_BUTTON;
+const MouseEvent_MouseButton MouseEvent_MouseButton_MouseButton_MAX = MouseEvent_MouseButton_MIDDLE_BUTTON;
+
+enum MouseEvent_MouseState {
+  MouseEvent_MouseState_UP = 0,
+  MouseEvent_MouseState_DOWN = 1
+};
+const ::google::protobuf::EnumDescriptor* MouseEvent_MouseState_descriptor();
+bool MouseEvent_MouseState_IsValid(int value);
+const MouseEvent_MouseState MouseEvent_MouseState_MouseState_MIN = MouseEvent_MouseState_UP;
+const MouseEvent_MouseState MouseEvent_MouseState_MouseState_MAX = MouseEvent_MouseState_DOWN;
 
 // ===================================================================
 
@@ -814,6 +834,149 @@ class ScaleMessage : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static ScaleMessage* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class MouseEvent : public ::google::protobuf::Message {
+ public:
+  MouseEvent();
+  virtual ~MouseEvent();
+  
+  MouseEvent(const MouseEvent& from);
+  
+  inline MouseEvent& operator=(const MouseEvent& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MouseEvent& default_instance();
+  // implements Message ----------------------------------------------
+  
+  MouseEvent* New() const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SetCachedSize(int size) const { _cached_size_ = size; }
+  public:
+  
+  const ::google::protobuf::Descriptor* GetDescriptor() const;
+  const ::google::protobuf::Reflection* GetReflection() const;
+  
+  // nested types ----------------------------------------------------
+  
+  typedef MouseEvent_MouseButton MouseButton;
+  static const MouseButton LEFT_BUTTON = MouseEvent_MouseButton_LEFT_BUTTON;
+  static const MouseButton RIGHT_BUTTON = MouseEvent_MouseButton_RIGHT_BUTTON;
+  static const MouseButton MIDDLE_BUTTON = MouseEvent_MouseButton_MIDDLE_BUTTON;
+  static inline const ::google::protobuf::EnumDescriptor*
+  MouseButton_descriptor() {
+    return MouseEvent_MouseButton_descriptor();
+  }
+  static inline bool MouseButton_IsValid(int value) {
+    return MouseEvent_MouseButton_IsValid(value);
+  }
+  static const MouseButton MouseButton_MIN =
+    MouseEvent_MouseButton_MouseButton_MIN;
+  static const MouseButton MouseButton_MAX =
+    MouseEvent_MouseButton_MouseButton_MAX;
+  
+  typedef MouseEvent_MouseState MouseState;
+  static const MouseState UP = MouseEvent_MouseState_UP;
+  static const MouseState DOWN = MouseEvent_MouseState_DOWN;
+  static inline const ::google::protobuf::EnumDescriptor*
+  MouseState_descriptor() {
+    return MouseEvent_MouseState_descriptor();
+  }
+  static inline bool MouseState_IsValid(int value) {
+    return MouseEvent_MouseState_IsValid(value);
+  }
+  static const MouseState MouseState_MIN =
+    MouseEvent_MouseState_MouseState_MIN;
+  static const MouseState MouseState_MAX =
+    MouseEvent_MouseState_MouseState_MAX;
+  
+  // accessors -------------------------------------------------------
+  
+  // required .MouseEvent.MouseButton button = 1;
+  inline bool has_button() const;
+  inline void clear_button();
+  inline ::MouseEvent_MouseButton button() const;
+  inline void set_button(::MouseEvent_MouseButton value);
+  
+  // required .MouseEvent.MouseState state = 2;
+  inline bool has_state() const;
+  inline void clear_state();
+  inline ::MouseEvent_MouseState state() const;
+  inline void set_state(::MouseEvent_MouseState value);
+  
+  // required int32 x = 3;
+  inline bool has_x() const;
+  inline void clear_x();
+  inline ::google::protobuf::int32 x() const;
+  inline void set_x(::google::protobuf::int32 value);
+  
+  // required int32 y = 4;
+  inline bool has_y() const;
+  inline void clear_y();
+  inline ::google::protobuf::int32 y() const;
+  inline void set_y(::google::protobuf::int32 value);
+  
+  // optional bool shift_down = 5;
+  inline bool has_shift_down() const;
+  inline void clear_shift_down();
+  inline bool shift_down() const;
+  inline void set_shift_down(bool value);
+  
+  // optional bool ctrl_down = 6;
+  inline bool has_ctrl_down() const;
+  inline void clear_ctrl_down();
+  inline bool ctrl_down() const;
+  inline void set_ctrl_down(bool value);
+  
+  // optional bool alt_down = 7;
+  inline bool has_alt_down() const;
+  inline void clear_alt_down();
+  inline bool alt_down() const;
+  inline void set_alt_down(bool value);
+  
+ private:
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  mutable int _cached_size_;
+  
+  int button_;
+  int state_;
+  ::google::protobuf::int32 x_;
+  ::google::protobuf::int32 y_;
+  bool shift_down_;
+  bool ctrl_down_;
+  bool alt_down_;
+  friend void protobuf_BuildDesc_graphics_2eproto_AssignGlobalDescriptors(
+      const ::google::protobuf::FileDescriptor* file);
+  static const int _offsets_[7];
+  
+  ::google::protobuf::uint32 _has_bits_[(7 + 31) / 32];
+  
+  // WHY DOES & HAVE LOWER PRECEDENCE THAN != !?
+  inline bool _has_bit(int index) const {
+    return (_has_bits_[index / 32] & (1u << (index % 32))) != 0;
+  }
+  inline void _set_bit(int index) {
+    _has_bits_[index / 32] |= (1u << (index % 32));
+  }
+  inline void _clear_bit(int index) {
+    _has_bits_[index / 32] &= ~(1u << (index % 32));
+  }
+  
+  void InitAsDefaultInstance();
+  static MouseEvent* default_instance_;
+};
 // ===================================================================
 
 
@@ -1360,6 +1523,124 @@ inline double ScaleMessage::scale() const {
 inline void ScaleMessage::set_scale(double value) {
   _set_bit(0);
   scale_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// MouseEvent
+
+// required .MouseEvent.MouseButton button = 1;
+inline bool MouseEvent::has_button() const {
+  return _has_bit(0);
+}
+inline void MouseEvent::clear_button() {
+  button_ = 0;
+  _clear_bit(0);
+}
+inline ::MouseEvent_MouseButton MouseEvent::button() const {
+  return static_cast< ::MouseEvent_MouseButton >(button_);
+}
+inline void MouseEvent::set_button(::MouseEvent_MouseButton value) {
+  GOOGLE_DCHECK(::MouseEvent_MouseButton_IsValid(value));
+  _set_bit(0);
+  button_ = value;
+}
+
+// required .MouseEvent.MouseState state = 2;
+inline bool MouseEvent::has_state() const {
+  return _has_bit(1);
+}
+inline void MouseEvent::clear_state() {
+  state_ = 0;
+  _clear_bit(1);
+}
+inline ::MouseEvent_MouseState MouseEvent::state() const {
+  return static_cast< ::MouseEvent_MouseState >(state_);
+}
+inline void MouseEvent::set_state(::MouseEvent_MouseState value) {
+  GOOGLE_DCHECK(::MouseEvent_MouseState_IsValid(value));
+  _set_bit(1);
+  state_ = value;
+}
+
+// required int32 x = 3;
+inline bool MouseEvent::has_x() const {
+  return _has_bit(2);
+}
+inline void MouseEvent::clear_x() {
+  x_ = 0;
+  _clear_bit(2);
+}
+inline ::google::protobuf::int32 MouseEvent::x() const {
+  return x_;
+}
+inline void MouseEvent::set_x(::google::protobuf::int32 value) {
+  _set_bit(2);
+  x_ = value;
+}
+
+// required int32 y = 4;
+inline bool MouseEvent::has_y() const {
+  return _has_bit(3);
+}
+inline void MouseEvent::clear_y() {
+  y_ = 0;
+  _clear_bit(3);
+}
+inline ::google::protobuf::int32 MouseEvent::y() const {
+  return y_;
+}
+inline void MouseEvent::set_y(::google::protobuf::int32 value) {
+  _set_bit(3);
+  y_ = value;
+}
+
+// optional bool shift_down = 5;
+inline bool MouseEvent::has_shift_down() const {
+  return _has_bit(4);
+}
+inline void MouseEvent::clear_shift_down() {
+  shift_down_ = false;
+  _clear_bit(4);
+}
+inline bool MouseEvent::shift_down() const {
+  return shift_down_;
+}
+inline void MouseEvent::set_shift_down(bool value) {
+  _set_bit(4);
+  shift_down_ = value;
+}
+
+// optional bool ctrl_down = 6;
+inline bool MouseEvent::has_ctrl_down() const {
+  return _has_bit(5);
+}
+inline void MouseEvent::clear_ctrl_down() {
+  ctrl_down_ = false;
+  _clear_bit(5);
+}
+inline bool MouseEvent::ctrl_down() const {
+  return ctrl_down_;
+}
+inline void MouseEvent::set_ctrl_down(bool value) {
+  _set_bit(5);
+  ctrl_down_ = value;
+}
+
+// optional bool alt_down = 7;
+inline bool MouseEvent::has_alt_down() const {
+  return _has_bit(6);
+}
+inline void MouseEvent::clear_alt_down() {
+  alt_down_ = false;
+  _clear_bit(6);
+}
+inline bool MouseEvent::alt_down() const {
+  return alt_down_;
+}
+inline void MouseEvent::set_alt_down(bool value) {
+  _set_bit(6);
+  alt_down_ = value;
 }
 
 #endif  // PROTOBUF_graphics_2eproto__INCLUDED

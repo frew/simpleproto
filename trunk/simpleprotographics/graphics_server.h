@@ -81,6 +81,7 @@ private:
   static void display_func();
   static void reshape_func(int width, int height);
   static void idle_func();
+  static void mouse_func(int button, int state, int x, int y);
 
   static GraphicsServer *g;
 
