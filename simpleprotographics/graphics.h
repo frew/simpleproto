@@ -1,20 +1,18 @@
-#ifndef _GRAPHICS_CLIENT_H_
-#define _GRAPHICS_CLIENT_H_
+#ifndef _SIMPLEPROTOGRAPHICS_GRAPHICS_H_
+#define _SIMPLEPROTOGRAPHICS_GRAPHICS_H_
 
 #include <simpleprotorpc/rpc.h>
 
 #include "graphics.pb.h"
 
-using namespace std;
-
 namespace simpleprotographics {
-class GraphicsClient {
+class Graphics {
  public:
   /**
    * Connect to a graphics server running at host:port.
    */
-  GraphicsClient(string host, string port);
-  ~GraphicsClient();
+  Graphics(std::string host, std::string port);
+  ~Graphics();
   
   /// Sets the current color based on a RGB values from 0.0 to 1.1.
   void SetColor(double r, double g, double b);

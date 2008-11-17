@@ -4,7 +4,7 @@ namespace simpleprotographics {
 
 using namespace simpleprotorpc;
 
-GraphicsClient::GraphicsClient(string host, string port)
+Graphics::Graphics(string host, string port)
   : enabled(host != "disabled")
 {
   if (!enabled) return;
@@ -12,12 +12,12 @@ GraphicsClient::GraphicsClient(string host, string port)
   conn->SetSendPolicy(RPC::SEND_LAST);
 }
 
-GraphicsClient::~GraphicsClient() {
+Graphics::~Graphics() {
   if (!enabled) return;
   delete conn;
 }
 
-void GraphicsClient::SetColor(double r, double g, double b )
+void Graphics::SetColor(double r, double g, double b )
 {
   if (!enabled) return;
   ColorMessage* m = cur_trans.add_message()->mutable_color();
@@ -26,7 +26,7 @@ void GraphicsClient::SetColor(double r, double g, double b )
   m->set_b((int) (b * INT_MAX));
 }
 
-void GraphicsClient::DrawPoint( double x, double y )
+void Graphics::DrawPoint( double x, double y )
 {
   if (!enabled) return;
   PointMessage* m = cur_trans.add_message()->mutable_point();
@@ -34,7 +34,7 @@ void GraphicsClient::DrawPoint( double x, double y )
   m->set_y(y);
 }
 
-void GraphicsClient::DrawLine( double x0, double y0, double x1, double y1 )
+void Graphics::DrawLine( double x0, double y0, double x1, double y1 )
 {
   if (!enabled) return;
 
@@ -45,14 +45,14 @@ void GraphicsClient::DrawLine( double x0, double y0, double x1, double y1 )
   m->set_y1(y1);
 }
 
-void GraphicsClient::SetPointSize( double sz ) 
+void Graphics::SetPointSize( double sz ) 
 {
   if (!enabled) return;
   PointSizeMessage* m = cur_trans.add_message()->mutable_point_size();
   m->set_sz(sz);
 }
 
-void GraphicsClient::DrawCircle(double cx, double cy, double radius)
+void Graphics::DrawCircle(double cx, double cy, double radius)
 {
   if (!enabled) return;
   CircleMessage* m = cur_trans.add_message()->mutable_circle();
@@ -61,13 +61,13 @@ void GraphicsClient::DrawCircle(double cx, double cy, double radius)
   m->set_radius(radius);
 }
 
-void GraphicsClient::SetScale(double scale) {
+void Graphics::SetScale(double scale) {
   if (!enabled) return;
   ScaleMessage* m = cur_trans.add_message()->mutable_scale();
   m->set_scale(scale);
 }
 
-void GraphicsClient::DrawMap(
+void Graphics::DrawMap(
     double xcenter, 
     double ycenter, 
     double scale,
@@ -88,7 +88,7 @@ void GraphicsClient::DrawMap(
   }
 }
 
-void GraphicsClient::DrawFrame(bool persistent)
+void Graphics::DrawFrame(bool persistent)
 {
   if (!enabled) return;
   if (persistent) cur_trans.set_persistent(persistent);
@@ -98,7 +98,7 @@ void GraphicsClient::DrawFrame(bool persistent)
   cur_trans.Clear();
 }
 
-GraphicsTransaction* GraphicsClient::current_transaction() {
+GraphicsTransaction* Graphics::current_transaction() {
   return &cur_trans;
 }
 }

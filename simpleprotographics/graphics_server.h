@@ -1,5 +1,5 @@
-#ifndef CS225B_GRAPHICS_H
-#define CS225B_GRAPHICS_H
+#ifndef _SIMPLEPROTOGRAPHICS_GRAPHICS_SERVER_H
+#define _SIMPLEPROTOGRAPHICS_GRAPHICS_SERVER_H
 
 #include <string>
 #include <boost/thread/mutex.hpp>
@@ -38,11 +38,10 @@ private:
     static Map* map;
 };
 
-// The main graphics class.
-class Graphics
+class GraphicsServer
 {
  public:
-  static Graphics *Instance(); // get an instace of the global graphics object
+  static GraphicsServer *Instance(); // get an instace of the global graphics object
 
   // Initialize the graphics system and start the graphics thread
   void Init(int &argc, char **arvg);
@@ -65,7 +64,7 @@ class Graphics
 
   void MainLoop(int &argc, char **argv);
 private:
-  Graphics();
+  GraphicsServer();
 
 
   double xCenter, yCenter;
@@ -83,7 +82,7 @@ private:
   static void reshape_func(int width, int height);
   static void idle_func();
 
-  static Graphics *g;
+  static GraphicsServer *g;
 
   boost::mutex waitQueueMutex;
 

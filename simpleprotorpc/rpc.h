@@ -1,5 +1,5 @@
-#ifndef _RPC_H_
-#define _RPC_H_
+#ifndef _SIMPLEPROTORPC_RPC_H_
+#define _SIMPLEPROTORPC_RPC_H_
 
 #include <iostream>
 #include <deque>
