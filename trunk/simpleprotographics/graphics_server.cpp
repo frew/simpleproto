@@ -28,7 +28,7 @@ using namespace std;
 using namespace simpleprotorpc;
 
 Map* Map::map = NULL;
-Graphics *Graphics::g = NULL;
+GraphicsServer *GraphicsServer::g = NULL;
 
 void Draw(const ColorMessage &m) {
   glColor3i(m.r(), m.g(), m.b());
@@ -76,28 +76,28 @@ void Map::DrawMap(const MapMessage& m) {
   }
 }
 
-Graphics::Graphics() : xCenter(0.0), yCenter(0.0), scale(10), bgR(0.0), bgG(0.0), bgB(0.0), isDirty(false), cmd_process(NULL), cmd_wait(NULL)
+GraphicsServer::GraphicsServer() : xCenter(0.0), yCenter(0.0), scale(10), bgR(0.0), bgG(0.0), bgB(0.0), isDirty(false), cmd_process(NULL), cmd_wait(NULL)
 {
 }
 
-Graphics *Graphics::Instance()
+GraphicsServer *GraphicsServer::Instance()
 {
   if( !g )
-    g = new Graphics;
+    g = new GraphicsServer;
   return g;
 }
 
-void Graphics::Init(int &argc, char **argv)
+void GraphicsServer::Init(int &argc, char **argv)
 {
-  thread(bind(&Graphics::MainLoop, this, argc, argv));
+  thread(bind(&GraphicsServer::MainLoop, this, argc, argv));
 }
 
-void Graphics::MainLoop(int &argc, char **argv)
+void GraphicsServer::MainLoop(int &argc, char **argv)
 {
   glutInit(&argc, argv);
-  glutInitWindowSize( DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT );
-  glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE );
-  glutCreateWindow( "CS225B Graphics Window"  );
+  glutInitWindowSize(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
+  glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+  glutCreateWindow("Simple Proto Graphics Server");
 
   glutDisplayFunc(display_func);
   glutReshapeFunc(reshape_func);
@@ -105,7 +105,7 @@ void Graphics::MainLoop(int &argc, char **argv)
 
   glutMainLoop();
 }
-void Graphics::DrawTrans(
+void GraphicsServer::DrawTrans(
     GraphicsTransaction* t) {
   for(int i = 0; i < t->message_size(); i++) {
     const GraphicsMessage& m = t->message(i);
@@ -119,7 +119,7 @@ void Graphics::DrawTrans(
   }
 }
 
-void Graphics::Display()
+void GraphicsServer::Display()
 {
   glClearColor(bgR, bgG, bgB, 0.0);
   glClear(GL_COLOR_BUFFER_BIT);
@@ -144,7 +144,7 @@ void Graphics::Display()
   //usleep(100000);
 }
 
-void Graphics::Reshape(int width, int height)
+void GraphicsServer::Reshape(int width, int height)
 {
   glViewport(0, 0, width, height);
 
@@ -156,7 +156,7 @@ void Graphics::Reshape(int width, int height)
 
 }
 
-void Graphics::Idle()
+void GraphicsServer::Idle()
 {
   if( isDirty ) {
     //lock and copy data
@@ -171,20 +171,20 @@ void Graphics::Idle()
   glutPostRedisplay();
 }
 
-void Graphics::display_func()
+void GraphicsServer::display_func()
 {
-  Graphics::Instance()->Display();
+  GraphicsServer::Instance()->Display();
 }
-void Graphics::reshape_func(int width, int height)
+void GraphicsServer::reshape_func(int width, int height)
 {
-  Graphics::Instance()->Reshape(width, height);
+  GraphicsServer::Instance()->Reshape(width, height);
 }
-void Graphics::idle_func()
+void GraphicsServer::idle_func()
 {
-  Graphics::Instance()->Idle();
+  GraphicsServer::Instance()->Idle();
 }
 
-void Graphics::ProcessTransaction(GraphicsTransaction* t)
+void GraphicsServer::ProcessTransaction(GraphicsTransaction* t)
 {
   mutex::scoped_lock lock(waitQueueMutex);
   if (t->persistent()) {
@@ -269,7 +269,7 @@ void Map::LoadTexture()
 }
 
 void NetworkThreadRun(string port) {
-  Graphics* g = Graphics::Instance();
+  GraphicsServer* g = GraphicsServer::Instance();
   try {
     RPC* rpc = RPC::CreateServer(port);
     while (true) {
@@ -291,7 +291,7 @@ int main(int argc, char** argv) {
   if (argc == 2) {
     port = argv[1];
   }
-  Graphics* g = Graphics::Instance();
+  GraphicsServer* g = GraphicsServer::Instance();
   thread(bind(NetworkThreadRun, port));
   g->MainLoop(argc, argv);
   return 0;

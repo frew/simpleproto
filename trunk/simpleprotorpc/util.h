@@ -1,5 +1,5 @@
-#ifndef _UTIL_H_
-#define _UTIL_H_
+#ifndef _SIMPLEPROTORPC_UTIL_H_
+#define _SIMPLEPROTORPC_UTIL_H_
 
 #include <sstream>
 
