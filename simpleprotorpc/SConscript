@@ -1,8 +1,8 @@
 Import('env')
 rpc_hdr = ['rpc.h', 'util.h']
 rpc_src = ['rpc.cpp', 'util.cpp']
-# rpc_sharedlib = env.SharedLibrary('simpleprotorpc', rpc_src)
+rpc_sharedlib = env.SharedLibrary('simpleprotorpc', rpc_src)
 rpc_staticlib = env.StaticLibrary('simpleprotorpc', rpc_src)
-# env.Install(env['LIBDIR'], rpc_sharedlib)
+env.Install(env['LIBDIR'], rpc_sharedlib)
 env.Install(env['LIBDIR'], rpc_staticlib)
 env.Install(env['INCDIR'], rpc_hdr)

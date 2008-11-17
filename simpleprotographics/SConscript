@@ -3,9 +3,9 @@ env2 = env
 env = env2.Clone()
 env.AppendUnique(LIBS=['libsimpleprotorpc',])
 graphics_source = ['graphics.cpp', 'graphics.pb.cc']
-# graphics_sharedlib = env.SharedLibrary('simpleprotographics', graphics_source)
+graphics_sharedlib = env.SharedLibrary('simpleprotographics', graphics_source)
 graphics_staticlib = env.StaticLibrary('simpleprotographics', graphics_source)
-# Install(env['LIBDIR'], graphics_sharedlib)
+Install(env['LIBDIR'], graphics_sharedlib)
 Install(env['LIBDIR'], graphics_staticlib)
 Install(env['INCDIR'], 'graphics.h')
 Install(env['INCDIR'], 'graphics.pb.h')
