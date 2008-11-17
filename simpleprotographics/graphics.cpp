@@ -1,15 +1,18 @@
 #include "graphics.h"
 
+#include <boost/bind.hpp>
+
 namespace simpleprotographics {
 
 using namespace simpleprotorpc;
 
 Graphics::Graphics(string host, string port)
-  : enabled(host != "disabled")
+  : enabled(host != "disabled"), mouse_callback(NULL)
 {
   if (!enabled) return;
   conn = RPC::CreateClient(host, port);
   conn->SetSendPolicy(RPC::SEND_LAST);
+  conn->StartAsyncRecv(boost::bind(&Graphics::InputCallback, this, _1));
 }
 
 Graphics::~Graphics() {
@@ -17,7 +20,7 @@ Graphics::~Graphics() {
   delete conn;
 }
 
-void Graphics::SetColor(double r, double g, double b )
+void Graphics::SetColor(double r, double g, double b)
 {
   if (!enabled) return;
   ColorMessage* m = cur_trans.add_message()->mutable_color();
@@ -96,6 +99,34 @@ void Graphics::DrawFrame(bool persistent)
   cur_trans.SerializeToString(&msg);
   conn->SendMessage(msg, false, !cur_trans.persistent());
   cur_trans.Clear();
+}
+
+void Graphics::RegisterMouseCallback(
+    void (*callback)(MouseButton button, bool down, int x, int y, 
+                     bool shift_down, bool ctrl_down, bool alt_down)) {
+  mouse_callback = callback;
+}
+
+void Graphics::InputCallback(string* s) {
+  // TODO(frew): Add support for events other than mouse
+  if (mouse_callback != NULL) {
+    MouseEvent e;
+    e.ParseFromString(*s);
+    MouseButton button;
+    switch (e.button()) {
+      case MouseEvent::LEFT_BUTTON:
+        button = LEFT_BUTTON;
+        break;
+      case MouseEvent::MIDDLE_BUTTON:
+        button = MIDDLE_BUTTON;
+        break;
+      case MouseEvent::RIGHT_BUTTON:
+        button = RIGHT_BUTTON;
+        break;
+    }
+    mouse_callback(button, e.state() == MouseEvent::DOWN, e.x(), e.y(),
+                   e.shift_down(), e.ctrl_down(), e.alt_down());
+  }
 }
 
 GraphicsTransaction* Graphics::current_transaction() {
