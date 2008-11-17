@@ -1,10 +1,10 @@
 #include "graphics_server.h"
 
-// #ifdef HAVE_GL_GLUT_H
+#ifdef HAVE_GL_GLUT_H
 #include <GL/glut.h>
-// #else
-// #include <GLUT/glut.h>
-// #endif
+#else
+#include <GLUT/glut.h>
+ #endif
 
 #include <boost/thread/thread.hpp>
 #include <boost/bind.hpp>
