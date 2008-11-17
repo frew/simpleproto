@@ -2,6 +2,7 @@
 #define _SIMPLEPROTOGRAPHICS_GRAPHICS_H_
 
 #include <simpleprotorpc/rpc.h>
+#include <boost/function.hpp>
 #include <boost/thread.hpp>
 
 #include "graphics.pb.h"
@@ -53,8 +54,8 @@ class Graphics {
   };
 
   void RegisterMouseCallback(
-      void (*callback)(MouseButton button, bool down, int x, int y, 
-                       bool shift_down, bool alt_down, bool ctrl_down));
+      boost::function<void (MouseButton button, bool down, int x, int y, 
+                            bool shift_down, bool alt_down, bool ctrl_down)>);
 
   /// Get at the current transaction. Not recommended unless you have a good idea
   /// of the behind the scenes functionality of the library.
@@ -68,8 +69,9 @@ class Graphics {
   simpleprotorpc::RPC* conn;
   GraphicsTransaction cur_trans;
   // TODO(frew): Unlikely race
-  void (*mouse_callback)(MouseButton button, bool down, int x, int y, 
-                         bool shift_down, bool ctrl_down, bool alt_down);
+  boost::function<void (MouseButton button, bool down, int x, int y, 
+                  bool shift_down, bool ctrl_down, bool alt_down)> 
+      mouse_callback;
 };
 }
 
