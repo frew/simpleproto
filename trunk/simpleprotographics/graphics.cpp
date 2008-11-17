@@ -1,5 +1,6 @@
 #include "graphics.h"
 
+#include <limits.h>
 #include <boost/bind.hpp>
 
 namespace simpleprotographics {
