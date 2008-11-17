@@ -52,7 +52,9 @@ RPC* RPC::CreateServer(string port) {
   return rpc;
 }
 
-RPC::RPC(string port) : port(port), async(false), server(true), send_policy(SEND_ALL) {
+RPC::RPC(string port) : port(port), async_send_thread_started(false),
+                        server(true), send_policy(SEND_ALL), 
+                        async_recv_thread_started(false) {
   addrinfo hints, *res;
   memset(&hints, 0, sizeof hints);
   hints.ai_family = AF_UNSPEC; // IPvWhatever
@@ -68,8 +70,10 @@ RPC::RPC(string port) : port(port), async(false), server(true), send_policy(SEND
   CheckErrno(listen(server_sock, 10), "Error listening on server sock.");
 }
 
-RPC::RPC(string host, string port) : host(host), port(port), async(false), server(false),
-    send_policy(SEND_ALL) {
+RPC::RPC(string host, string port) : host(host), port(port), 
+                                     async_send_thread_started(false), 
+                                     server(false), send_policy(SEND_ALL),
+                                     async_recv_thread_started(false) {
   addrinfo hints, *res;
   memset(&hints, 0, sizeof hints);
   hints.ai_family = AF_UNSPEC;
@@ -128,10 +132,10 @@ void RPC::AsyncSend() {
 
 void RPC::SendMessage(string& msg, bool send_async, bool ensure_sent) {
   if (send_async) {
-    if (!async) {
+    if (!async_send_thread_started) {
       // Start the async thread.
       boost::thread(boost::bind(&RPC::AsyncSend, this));
-      async = true;
+      async_send_thread_started = true;
     }
     boost::mutex::scoped_lock l(messages_mutex);
     messages.push_back(pair<string*, bool>(new string(msg), ensure_sent)); 
@@ -225,4 +229,25 @@ string* RPC::PollMessage(bool blocking) {
   delete[] buf;
   return ret_string;
 }
+
+void RPC::AsyncRecv() {
+  while (async_recv_thread_started) {
+    string* msg = PollMessage(true);
+    async_recv_callback(msg);
+    delete msg;
+  }
+}
+
+void RPC::StartAsyncRecv(boost::function<void (string* s)> callback) {
+  async_recv_callback = callback;
+  if (!async_recv_thread_started) {
+    async_recv_thread_started = true;
+    boost::thread(boost::bind(&RPC::AsyncRecv, this));
+  }
+}
+
+void RPC::StopAsyncRecv() {
+  async_recv_thread_started = false;
+}
+
 }

@@ -2,6 +2,7 @@
 #define _SIMPLEPROTOGRAPHICS_GRAPHICS_H_
 
 #include <simpleprotorpc/rpc.h>
+#include <boost/thread.hpp>
 
 #include "graphics.pb.h"
 
@@ -45,13 +46,30 @@ class Graphics {
   //    they are each drawn in the order that they were received.
   void DrawFrame(bool persistent=false);
 
+  enum MouseButton {
+    LEFT_BUTTON,
+    RIGHT_BUTTON,
+    MIDDLE_BUTTON
+  };
+
+  void RegisterMouseCallback(
+      void (*callback)(MouseButton button, bool down, int x, int y, 
+                       bool shift_down, bool alt_down, bool ctrl_down));
+
   /// Get at the current transaction. Not recommended unless you have a good idea
   /// of the behind the scenes functionality of the library.
   GraphicsTransaction* current_transaction();
+
+ protected:
+  void InputCallback(string* s);
+
  private:
   bool enabled;
   simpleprotorpc::RPC* conn;
   GraphicsTransaction cur_trans;
+  // TODO(frew): Unlikely race
+  void (*mouse_callback)(MouseButton button, bool down, int x, int y, 
+                         bool shift_down, bool ctrl_down, bool alt_down);
 };
 }
 

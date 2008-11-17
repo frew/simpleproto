@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <utility>
 
+#include <boost/function.hpp>
 #include <boost/thread/mutex.hpp>
 
 #include "util.h"
@@ -80,9 +81,8 @@ class RPC {
    */
   void SetSendPolicy(AsyncSendPolicy new_send_policy); 
   
-  // Not currently implemented.
-  // void StartAsyncRecv(void (*callback)(string*));
-  // void StopAsyncRecv();
+  void StartAsyncRecv(boost::function<void (string* s)> callback);
+  void StopAsyncRecv();
   
  protected:
   /** 
@@ -90,6 +90,12 @@ class RPC {
    * and have been waiting in the queue.
    */
   void AsyncSend();
+
+  /**
+   * Wait for messages received and then dispatch them to the given
+   * callback.
+   */
+  void AsyncRecv();
 
  private:
   RPC();
@@ -104,13 +110,16 @@ class RPC {
   deque<int> sock_list;
   string host;
   string port;
-  bool async;
+  bool async_send_thread_started;
   bool server;
   int server_sock;
   int max_fd;
 
   AsyncSendPolicy send_policy;
   boost::mutex send_policy_mutex;
+
+  boost::function<void (string* s)> async_recv_callback;
+  bool async_recv_thread_started;
 };
 }
 #endif
