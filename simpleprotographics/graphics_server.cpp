@@ -240,8 +240,8 @@ void GraphicsServer::mouse_func(int button, int state, int x, int y)
                &obj_x, &obj_y, &obj_z); 
 
   GraphicsServer* g = GraphicsServer::Instance();
-  e.set_x(obj_x - g->xCenter);
-  e.set_y(obj_y - g->yCenter);
+  e.set_x(obj_x);
+  e.set_y(obj_y);
 
   if (modifiers & GLUT_ACTIVE_SHIFT) {
     e.set_shift_down(true); 
