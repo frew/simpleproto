@@ -2,6 +2,7 @@
 
 #include <limits.h>
 #include <boost/bind.hpp>
+#include <boost/thread.hpp>
 
 namespace simpleprotographics {
 
@@ -24,6 +25,7 @@ Graphics::~Graphics() {
 void Graphics::SetColor(double r, double g, double b)
 {
   if (!enabled) return;
+  boost::mutex::scoped_lock l(graphics_mutex);
   ColorMessage* m = cur_trans.add_message()->mutable_color();
   m->set_r((int) (r * INT_MAX));
   m->set_g((int) (g * INT_MAX));
@@ -33,6 +35,7 @@ void Graphics::SetColor(double r, double g, double b)
 void Graphics::DrawPoint( double x, double y )
 {
   if (!enabled) return;
+  boost::mutex::scoped_lock l(graphics_mutex);
   PointMessage* m = cur_trans.add_message()->mutable_point();
   m->set_x(x);
   m->set_y(y);
@@ -41,7 +44,7 @@ void Graphics::DrawPoint( double x, double y )
 void Graphics::DrawLine( double x0, double y0, double x1, double y1 )
 {
   if (!enabled) return;
-
+  boost::mutex::scoped_lock l(graphics_mutex);
   LineMessage* m = cur_trans.add_message()->mutable_line();
   m->set_x0(x0);
   m->set_y0(y0);
@@ -52,6 +55,7 @@ void Graphics::DrawLine( double x0, double y0, double x1, double y1 )
 void Graphics::SetPointSize( double sz ) 
 {
   if (!enabled) return;
+  boost::mutex::scoped_lock l(graphics_mutex);
   PointSizeMessage* m = cur_trans.add_message()->mutable_point_size();
   m->set_sz(sz);
 }
@@ -59,6 +63,7 @@ void Graphics::SetPointSize( double sz )
 void Graphics::DrawCircle(double cx, double cy, double radius)
 {
   if (!enabled) return;
+  boost::mutex::scoped_lock l(graphics_mutex);
   CircleMessage* m = cur_trans.add_message()->mutable_circle();
   m->set_cx(cx);
   m->set_cy(cy);
@@ -67,6 +72,7 @@ void Graphics::DrawCircle(double cx, double cy, double radius)
 
 void Graphics::SetScale(double scale) {
   if (!enabled) return;
+  boost::mutex::scoped_lock l(graphics_mutex);
   ScaleMessage* m = cur_trans.add_message()->mutable_scale();
   m->set_scale(scale);
 }
@@ -95,6 +101,7 @@ void Graphics::DrawMap(
 void Graphics::DrawFrame(bool persistent)
 {
   if (!enabled) return;
+  boost::mutex::scoped_lock l(graphics_mutex);
   if (persistent) cur_trans.set_persistent(persistent);
   string msg;
   cur_trans.SerializeToString(&msg);

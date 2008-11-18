@@ -107,7 +107,7 @@ void GraphicsServer::MainLoop(int &argc, char **argv)
   glutReshapeFunc(reshape_func);
   glutIdleFunc(idle_func);
   glutMouseFunc(mouse_func);
-
+  glutKeyboardFunc(keyboard_func);
   glutMainLoop();
 }
 
@@ -230,6 +230,27 @@ void GraphicsServer::mouse_func(int button, int state, int x, int y)
   e.SerializeToString(&msg);
   cout << "Sending msg" << endl;
   rpc->SendMessage(msg, true);
+}
+
+void GraphicsServer::keyboard_func(unsigned char key, int x, int y) {
+  GraphicsServer* g = GraphicsServer::Instance();
+  switch (key) {
+    case 'w':
+      g->yCenter += 2.0;
+      break;
+    case 's':
+      g->yCenter -= 2.0;
+      break;
+    case 'a':
+      g->xCenter -= 2.0;
+      break;
+    case 'd':
+      g->xCenter += 2.0;
+      break;
+    default:
+      cout << "Got unrecognized key." << endl;
+      break;
+  }
 }
 
 void GraphicsServer::ProcessTransaction(GraphicsTransaction* t)
