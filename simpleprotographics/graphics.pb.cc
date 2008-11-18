@@ -218,7 +218,7 @@ void protobuf_BuildDesc_graphics_2eproto() {
     "\"\035\n\014ScaleMessage\022\r\n\005scale\030\001 \002(\001\"\220\002\n\nMous"
     "eEvent\022\'\n\006button\030\001 \002(\0162\027.MouseEvent.Mous"
     "eButton\022%\n\005state\030\002 \002(\0162\026.MouseEvent.Mous"
-    "eState\022\t\n\001x\030\003 \002(\005\022\t\n\001y\030\004 \002(\005\022\022\n\nshift_do"
+    "eState\022\t\n\001x\030\003 \002(\001\022\t\n\001y\030\004 \002(\001\022\022\n\nshift_do"
     "wn\030\005 \001(\010\022\021\n\tctrl_down\030\006 \001(\010\022\020\n\010alt_down\030"
     "\007 \001(\010\"C\n\013MouseButton\022\017\n\013LEFT_BUTTON\020\000\022\020\n"
     "\014RIGHT_BUTTON\020\001\022\021\n\rMIDDLE_BUTTON\020\002\"\036\n\nMo"

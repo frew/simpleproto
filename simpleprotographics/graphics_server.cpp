@@ -1,10 +1,22 @@
 #include "graphics_server.h"
 
+#ifdef HAVE_GL_GL_H
+#include <GL/gl.h>
+#else
+#include <OpenGL/gl.h>
+#endif
+
+#ifdef HAVE_GL_GLU_H
+#include <GL/glu.h>
+#else
+#include <OpenGL/glu.h>
+#endif
+
 #ifdef HAVE_GL_GLUT_H
 #include <GL/glut.h>
 #else
 #include <GLUT/glut.h>
- #endif
+#endif
 
 #include <boost/thread/thread.hpp>
 #include <boost/bind.hpp>
@@ -214,8 +226,21 @@ void GraphicsServer::mouse_func(int button, int state, int x, int y)
     case GLUT_DOWN:
       e.set_state(MouseEvent::DOWN);
   }
-  e.set_x(x);
-  e.set_y(y);
+
+  GLdouble model_view[16];
+  glGetDoublev(GL_MODELVIEW_MATRIX, model_view);
+  GLdouble projection[16];
+  glGetDoublev(GL_PROJECTION_MATRIX, projection);
+  GLint viewport[4];
+  glGetIntegerv(GL_VIEWPORT, viewport);
+
+  GLdouble obj_x, obj_y, obj_z;
+
+  gluUnProject(x, y, 0.01, model_view, projection, viewport,
+               &obj_x, &obj_y, &obj_z); 
+
+  e.set_x(obj_x);
+  e.set_y(obj_y);
 
   if (modifiers & GLUT_ACTIVE_SHIFT) {
     e.set_shift_down(true); 

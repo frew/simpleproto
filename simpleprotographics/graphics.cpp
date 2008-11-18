@@ -110,7 +110,7 @@ void Graphics::DrawFrame(bool persistent)
 }
 
 void Graphics::RegisterMouseCallback(
-    boost::function<void (MouseButton button, bool down, int x, int y, 
+    boost::function<void (MouseButton button, bool down, double x, double y, 
                      bool shift_down, bool ctrl_down, bool alt_down)> callback) {
   mouse_callback = callback;
 }
