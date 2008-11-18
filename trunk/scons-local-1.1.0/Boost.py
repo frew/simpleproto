@@ -72,6 +72,8 @@ def CheckBoost(context):
       m = re.search(r'libboost_thread([^.]*)\.', lib)
       if m is not None:
         if lib.find(boost_lib_version_string(best_version)) != -1 or best_libsuffix is None:
+          while lib[-1].isdigit() or lib[-1] == '.':
+            lib = lib[0:-1]
           best_libsuffix = lib[len('libboost_thread'):lib.rfind('.')]
  
   context.Result(best_libsuffix is not None)
