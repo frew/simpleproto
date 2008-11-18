@@ -916,17 +916,17 @@ class MouseEvent : public ::google::protobuf::Message {
   inline ::MouseEvent_MouseState state() const;
   inline void set_state(::MouseEvent_MouseState value);
   
-  // required int32 x = 3;
+  // required double x = 3;
   inline bool has_x() const;
   inline void clear_x();
-  inline ::google::protobuf::int32 x() const;
-  inline void set_x(::google::protobuf::int32 value);
+  inline double x() const;
+  inline void set_x(double value);
   
-  // required int32 y = 4;
+  // required double y = 4;
   inline bool has_y() const;
   inline void clear_y();
-  inline ::google::protobuf::int32 y() const;
-  inline void set_y(::google::protobuf::int32 value);
+  inline double y() const;
+  inline void set_y(double value);
   
   // optional bool shift_down = 5;
   inline bool has_shift_down() const;
@@ -952,8 +952,8 @@ class MouseEvent : public ::google::protobuf::Message {
   
   int button_;
   int state_;
-  ::google::protobuf::int32 x_;
-  ::google::protobuf::int32 y_;
+  double x_;
+  double y_;
   bool shift_down_;
   bool ctrl_down_;
   bool alt_down_;
@@ -1563,7 +1563,7 @@ inline void MouseEvent::set_state(::MouseEvent_MouseState value) {
   state_ = value;
 }
 
-// required int32 x = 3;
+// required double x = 3;
 inline bool MouseEvent::has_x() const {
   return _has_bit(2);
 }
@@ -1571,15 +1571,15 @@ inline void MouseEvent::clear_x() {
   x_ = 0;
   _clear_bit(2);
 }
-inline ::google::protobuf::int32 MouseEvent::x() const {
+inline double MouseEvent::x() const {
   return x_;
 }
-inline void MouseEvent::set_x(::google::protobuf::int32 value) {
+inline void MouseEvent::set_x(double value) {
   _set_bit(2);
   x_ = value;
 }
 
-// required int32 y = 4;
+// required double y = 4;
 inline bool MouseEvent::has_y() const {
   return _has_bit(3);
 }
@@ -1587,10 +1587,10 @@ inline void MouseEvent::clear_y() {
   y_ = 0;
   _clear_bit(3);
 }
-inline ::google::protobuf::int32 MouseEvent::y() const {
+inline double MouseEvent::y() const {
   return y_;
 }
-inline void MouseEvent::set_y(::google::protobuf::int32 value) {
+inline void MouseEvent::set_y(double value) {
   _set_bit(3);
   y_ = value;
 }

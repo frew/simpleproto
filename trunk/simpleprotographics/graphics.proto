@@ -78,8 +78,8 @@ message MouseEvent {
   }
   required MouseState state = 2;
 
-  required int32 x = 3;
-  required int32 y = 4;
+  required double x = 3;
+  required double y = 4;
 
   optional bool shift_down = 5;
   optional bool ctrl_down = 6;

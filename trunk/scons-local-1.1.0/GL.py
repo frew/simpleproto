@@ -5,10 +5,10 @@ def CheckGL(context):
   context.did_show_result = True
   found_header = False
   if context.sconf.CheckHeader('GL/gl.h', language='C++'):
-    context.env.AppendUnique(CXXFLAGS='-DHAS_GL_GL_H')
+    context.env.AppendUnique(CXXFLAGS='-DHAVE_GL_GL_H')
     found_header = True
   if context.sconf.CheckHeader('OpenGL/gl.h', language='C++'):
-    context.env.AppendUnique(CXXFLAGS='-DHAS_OPENGL_GL_H')
+    context.env.AppendUnique(CXXFLAGS='-DHAVE_OPENGL_GL_H')
     found_header = True
   if not found_header:
     return False

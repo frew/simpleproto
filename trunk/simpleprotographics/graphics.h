@@ -54,7 +54,7 @@ class Graphics {
   };
 
   void RegisterMouseCallback(
-      boost::function<void (MouseButton button, bool down, int x, int y, 
+      boost::function<void (MouseButton button, bool down, double x, double y, 
                             bool shift_down, bool alt_down, bool ctrl_down)>);
 
   /// Get at the current transaction. Not recommended unless you have a good idea
