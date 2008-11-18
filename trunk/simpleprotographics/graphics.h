@@ -70,7 +70,7 @@ class Graphics {
   GraphicsTransaction cur_trans;
   boost::mutex graphics_mutex;
   // TODO(frew): Unlikely race
-  boost::function<void (MouseButton button, bool down, int x, int y, 
+  boost::function<void (MouseButton button, bool down, double x, double y, 
                   bool shift_down, bool ctrl_down, bool alt_down)> 
       mouse_callback;
 };
