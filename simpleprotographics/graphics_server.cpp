@@ -239,8 +239,9 @@ void GraphicsServer::mouse_func(int button, int state, int x, int y)
   gluUnProject(x, y, 0.01, model_view, projection, viewport,
                &obj_x, &obj_y, &obj_z); 
 
-  e.set_x(obj_x);
-  e.set_y(obj_y);
+  GraphicsServer* g = GraphicsServer::Instance();
+  e.set_x(obj_x + g->xCenter);
+  e.set_y(obj_y + g->yCenter);
 
   if (modifiers & GLUT_ACTIVE_SHIFT) {
     e.set_shift_down(true); 
