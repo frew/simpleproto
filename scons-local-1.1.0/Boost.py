@@ -20,6 +20,7 @@ def CheckBoost(context):
 
   if context.env.GetOption('boost_prefix') is not None:
     prefixes = [context.env.GetOption('boost_prefix')]
+    print "Boost prefix: %s" % prefixes
 
   best_prefix = None
   best_incdir = None
@@ -29,7 +30,6 @@ def CheckBoost(context):
   context.Message('Checking for Boost include files...')
   for prefix in prefixes:
     incdir = join(prefix, 'include')
-
     if isdir(incdir):
       boost_incdirs = [dir for dir in listdir(incdir) if dir.startswith('boost')]
       for dir in boost_incdirs:
@@ -37,7 +37,7 @@ def CheckBoost(context):
           current_incdir = incdir
         else:
           current_incdir = join(incdir, dir)
-        version_header = join(incdir, 'boost', 'version.hpp')
+        version_header = join(current_incdir, 'boost', 'version.hpp')
         if exists(version_header):
           version_file = open(version_header)
           for line in version_file:

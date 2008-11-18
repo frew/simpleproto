@@ -1,3 +1,11 @@
+simpleproto requires that Google protocol buffers are already installed.
+Download at:
+  http://code.google.com/p/protobuf/downloads/list
+You can install protocol buffers locally via
+  ./configure --prefix={insert dir here} && make && make install
+If you do this, you'll want to pass the prefix to scons.py with:
+  python scons.py --protobuf-prefix={insert dir here}
+
 To build the graphics server:
   python scons.py server
 
