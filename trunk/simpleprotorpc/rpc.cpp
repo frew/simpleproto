@@ -182,7 +182,7 @@ string* RPC::PollMessage(bool blocking) {
   CheckErrno(select(max_fd + 1, &socks, NULL, NULL, blocking ? NULL : &tv),
              "Select failed."); 
   if (server && FD_ISSET(server_sock, &socks)) {
-    socklen_t addr_size;
+    socklen_t addr_size = sizeof(sockaddr_storage);
     sockaddr_storage their_addr;
     int new_fd = accept(server_sock, (struct sockaddr *)&their_addr, &addr_size); 
     CheckErrno(new_fd, "Error accepting server socket.");
